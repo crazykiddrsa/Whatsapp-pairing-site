@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhlakziin Pairing</title>
+    <style>
+        body { font-family: sans-serif; background: #111; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .box { background: #222; padding: 30px; border-radius: 15px; box-shadow: 0 0 20px #25D366; text-align: center; width: 80%; max-width: 400px; }
+        input { width: 90%; padding: 12px; margin: 15px 0; border-radius: 8px; border: none; font-size: 16px; }
+        button { background: #25D366; color: black; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        #code { font-size: 24px; color: #25D366; margin-top: 20px; font-family: monospace; letter-spacing: 3px; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2>WhatsApp Pairing</h2>
+        <p>Enter number with country code</p>
+        <input type="text" id="phone" placeholder="e.g. 27123456789">
+        <button onclick="getCode()">GET CODE</button>
+        <div id="code"></div>
+    </div>
+
+    <script>
+        async function getCode() {
+            const num = document.getElementById('phone').value;
+            const display = document.getElementById('code');
+            display.innerText = "Please wait...";
+            try {
+                const res = await fetch(`/get-code?number=${num}`);
+                const data = await res.json();
+                display.innerText = data.code || data.error;
+            } catch (e) {
+                display.innerText = "Error connecting to server";
+            }
+        }
+    </script>
+</body>
+</html>
+
