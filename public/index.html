@@ -1,39 +1,72 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nhlakziin Pairing</title>
+    <title>NHLAKZIN CORE</title>
     <style>
-        body { font-family: sans-serif; background: #111; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        .box { background: #222; padding: 30px; border-radius: 15px; box-shadow: 0 0 20px #25D366; text-align: center; width: 80%; max-width: 400px; }
-        input { width: 90%; padding: 12px; margin: 15px 0; border-radius: 8px; border: none; font-size: 16px; }
-        button { background: #25D366; color: black; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; }
-        #code { font-size: 24px; color: #25D366; margin-top: 20px; font-family: monospace; letter-spacing: 3px; }
+        :root { --neon: #25D366; --bg: #050505; }
+        body { background: var(--bg); color: white; font-family: monospace; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .container { border: 1px solid var(--neon); padding: 30px; text-align: center; box-shadow: 0 0 20px rgba(37,211,102,0.2); background: rgba(0,0,0,0.8); width: 85%; max-width: 400px; position: relative; }
+        
+        /* Status Dot */
+        .status-bar { position: absolute; top: 10px; right: 15px; display: flex; align-items: center; font-size: 10px; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; animation: blink 1.5s infinite; }
+        .online { background: var(--neon); box-shadow: 0 0 10px var(--neon); }
+        .offline { background: #ff3e3e; box-shadow: 0 0 10px #ff3e3e; display: none; }
+        
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+
+        h1 { color: var(--neon); letter-spacing: 4px; text-shadow: 0 0 10px var(--neon); margin-top: 20px; }
+        input { width: 100%; padding: 12px; margin: 20px 0; background: #111; border: 1px solid var(--neon); color: var(--neon); text-align: center; box-sizing: border-box; }
+        button { width: 100%; padding: 15px; background: var(--neon); color: black; font-weight: bold; border: none; cursor: pointer; transition: 0.3s; }
+        button:hover { background: white; box-shadow: 0 0 20px white; }
+        
+        #result-label { color: #666; font-size: 12px; margin-top: 20px; }
+        #code { font-size: 28px; color: var(--neon); font-weight: bold; letter-spacing: 5px; margin-top: 10px; }
     </style>
 </head>
 <body>
-    <div class="box">
-        <h2>WhatsApp Pairing</h2>
-        <p>Enter number with country code</p>
-        <input type="text" id="phone" placeholder="e.g. 27123456789">
-        <button onclick="getCode()">GET CODE</button>
-        <div id="code"></div>
+
+<div class="container">
+    <div class="status-bar">
+        <div id="dot" class="dot online"></div>
+        <span id="status-text">NHLAKZIN_SYSTEM: ONLINE</span>
     </div>
 
-    <script>
-        async function getCode() {
-            const num = document.getElementById('phone').value;
-            const display = document.getElementById('code');
-            display.innerText = "Please wait...";
-            try {
-                const res = await fetch(`/get-code?number=${num}`);
-                const data = await res.json();
-                display.innerText = data.code || data.error;
-            } catch (e) {
-                display.innerText = "Error connecting to server";
-            }
+    <h1>NHLAKZIN MD</h1>
+    <input type="text" id="num" placeholder="PHONE (e.g. 27...)" />
+    <button onclick="getCode()">INITIALIZE PAIRING</button>
+
+    <div id="result-label">PROTOCOL STATUS</div>
+    <div id="code">WAITING...</div>
+</div>
+
+<script>
+    // Check if site is online
+    window.onload = () => {
+        if (!navigator.onLine) {
+            document.getElementById('dot').className = 'dot offline';
+            document.getElementById('status-text').innerText = 'SYSTEM: OFFLINE';
         }
-    </script>
+    };
+
+    async function getCode() {
+        const num = document.getElementById('num').value;
+        const codeDiv = document.getElementById('code');
+        
+        codeDiv.innerText = "NHLAKZIN..."; // Your name shows while loading
+        
+        try {
+            const res = await fetch(`/get-code?number=${num}`);
+            const data = await res.json();
+            codeDiv.innerText = data.code || "RETRY";
+        } catch (e) {
+            codeDiv.innerText = "OFFLINE";
+            document.getElementById('dot').className = 'dot offline';
+        }
+    }
+</script>
 </body>
 </html>
 

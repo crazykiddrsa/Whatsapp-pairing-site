@@ -29,7 +29,7 @@ app.get('/get-code', async (req, res) => {
     try {
         await delay(3000); // Give the socket time to initialize
         const code = await sock.requestPairingCode(num);
-        res.json({ code: code });
+        res.json({ code: code, brand: "NHLAKZIN" });
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: "Failed to generate code. Try again." });
